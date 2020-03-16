@@ -20,7 +20,7 @@ namespace _8Mi_MCAriaPlus
         {
             //E:程序集变量 名称 ProjectGroup 类型 文本型_数组 数组 0
             //C#:忘了..
-            ComboBox_ProjectGroup.Items.AddRange("PG-Via;PG-Vle;PG-AuthMe;PG-BentoBoxWorld;P-LuckPerms;P-PlotSquared;P-FastAsyncWorldEdit;S-Paper;S-Mohist;S-BungeeCord;S-Waterfall;S-Travertine;SG-OneKeyDownload".Split(';'));
+            ComboBox_ProjectGroup.Items.AddRange("PG-Via;PG-Vle;PG-AuthMe;PG-BentoBoxWorld;P-LuckPerms;P-PlotSquared;P-FastAsyncWorldEdit;S-Mohist;S-Paper;S-BungeeCord;S-Waterfall;S-Travertine;SG-OneKeyDownload".Split(';'));
             //C#:string[] 文本数组变量="文本".Split('用作分割的文本');<前面有 string[] 是直接生成一个变量>
             //E: 文本数组变量 = 分割文本("文本","用作分割的文本",)
 
@@ -110,19 +110,30 @@ namespace _8Mi_MCAriaPlus
                     case ("P-FastAsyncWorldEdit"):
                         JSON = JObject.Parse(readHtml(""));
                         break;
+                    case ("S-Mohist"):
+                        JSON = JObject.Parse(readHtml("https://ci.codemc.io/job/Mohist-Community/api/json"));
+                        foreach (var Name in JSON["jobs"])
+                            ComboBox_ProjectName.Items.Add(Name["name"]);
+                        break;
                     case ("S-Paper"):
                         JSON = JObject.Parse(readHtml("https://papermc.io/api/v1/paper/"));
                         foreach (var Name in JSON["versions"])
                             ComboBox_ProjectName.Items.Add(Name.ToString());
                         break;
                     case ("S-BungeeCord"):
-                        JSON = JObject.Parse(readHtml(""));
+                        JSON = JObject.Parse(readHtml("https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/api/json"));
+                        foreach (var Name in JSON["artifacts"])
+                            ComboBox_ProjectName.Items.Add(Name["fileName"]);
                         break;
                     case ("S-Waterfall"):
-                        JSON = JObject.Parse(readHtml(""));
+                        JSON = JObject.Parse(readHtml("https://papermc.io/ci/job/Waterfall/lastSuccessfulBuild/api/json"));
+                        foreach (var Name in JSON["artifacts"])
+                            ComboBox_ProjectName.Items.Add(Name["fileName"]);
                         break;
                     case ("S-Travertine"):
-                        JSON = JObject.Parse(readHtml(""));
+                        JSON = JObject.Parse(readHtml("https://papermc.io/ci/job/Travertine/lastSuccessfulBuild/api/json"));
+                        foreach (var Name in JSON["artifacts"])
+                            ComboBox_ProjectName.Items.Add(Name["fileName"]);
                         break;
                     case ("SG-OneKeyDownload"):
                         ComboBox_ProjectName.Items.AddRange("BungeeCord;Waterfall;Travertine;Paper-1.12;Paper-1.13;Paper-1.14".Split(';'));
@@ -199,10 +210,10 @@ namespace _8Mi_MCAriaPlus
         }
         private void Button_Download_MouseUp(object sender, MouseEventArgs e)
         {
+            All_Boxs_Enabled_Check(false, 1);
             setEnabledforAllComponents(this,false);
             Button_Download.BorderStyle = Border3DStyle.Raised;
             new Thread(()=> {
-                All_Boxs_Enabled_Check(false, 1);
                 WebClient WDNMD_WC = new WebClient();
                 Stopwatch awawa = new Stopwatch();
                
@@ -259,6 +270,26 @@ namespace _8Mi_MCAriaPlus
                         Program.DownloadLink = "https://papermc.io/api/v1/paper/" + ComboBox_ProjectName.Text + "/latest/download";
                         Program.FileName = "paper"+"-"+JSON["build"].ToString()+".jar";
                         break;
+                    case ("S-Travertine"):
+                        JSON = JObject.Parse(readHtml("https://papermc.io/ci/job/Travertine/lastSuccessfulBuild/api/json"));
+                        Program.DownloadLink = "https://papermc.io/ci/job/Travertine/lastSuccessfulBuild/artifact/" + JSON["artifacts"][ComboBox_ProjectName.SelectedIndex]["relativePath"];
+                        Program.FileName = JSON["artifacts"][ComboBox_ProjectName.SelectedIndex]["fileName"].ToString();
+                        break;
+                    case ("S-Waterfall"):
+                        JSON = JObject.Parse(readHtml("https://papermc.io/ci/job/Waterfall/lastSuccessfulBuild/api/json"));
+                        Program.DownloadLink = "https://papermc.io/ci/job/Waterfall/lastSuccessfulBuild/artifact/" + JSON["artifacts"][ComboBox_ProjectName.SelectedIndex]["relativePath"];
+                        Program.FileName = JSON["artifacts"][ComboBox_ProjectName.SelectedIndex]["fileName"].ToString();
+                        break;
+                    case ("S-Mohist"):
+                        JSON = JObject.Parse(readHtml("https://ci.codemc.org/job/Mohist-Community/job/" + ComboBox_ProjectName.Text + "/lastSuccessfulBuild/api/json"));
+                        Program.DownloadLink = "https://ci.codemc.org/job/Mohist-Community/job/" + ComboBox_ProjectName.Text + "/lastSuccessfulBuild/artifact/" + JSON["artifacts"].Last["relativePath"];
+                        Program.FileName = JSON["artifacts"].Last["fileName"].ToString();
+                        break;
+                    case ("S-BungeeCord"):
+                        JSON = JObject.Parse(readHtml("https://ci.md-5.net/job/BungeeCord//lastSuccessfulBuild/api/json"));
+                        Program.DownloadLink = "https://ci.md-5.net/job/BungeeCord//lastSuccessfulBuild/artifact/" + JSON["artifacts"][ComboBox_ProjectName.SelectedIndex]["relativePath"];
+                        Program.FileName = JSON["artifacts"][ComboBox_ProjectName.SelectedIndex]["fileName"].ToString();
+                        break;
                 }
                 AutoChangeName();
                 All_Boxs_Enabled_Check(true, 0);
@@ -281,6 +312,10 @@ namespace _8Mi_MCAriaPlus
                 else if (ProjectGroupName[0] == "SG")
                 {
                     TextBox_FileName.Text = ComboBox_ProjectName.Text+".jar";
+                }
+                else if(ProjectGroupName[0] == "S")
+                {
+                    TextBox_FileName.Text = ComboBox_ProjectName.Text + ".jar";
                 }
                 else
                 {
