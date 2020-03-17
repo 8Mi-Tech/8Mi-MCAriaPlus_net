@@ -74,7 +74,7 @@
             this.ComboBox_ProjectGroup.Name = "ComboBox_ProjectGroup";
             this.ComboBox_ProjectGroup.Size = new System.Drawing.Size(164, 20);
             this.ComboBox_ProjectGroup.TabIndex = 1;
-            this.Tips.SetToolTip(this.ComboBox_ProjectGroup, "开头带有SG;PG就代表这是个组");
+            this.Tips.SetToolTip(this.ComboBox_ProjectGroup, "开头带有SG;PG;MG就代表这是个组,什么类型的组看首个字符");
             this.ComboBox_ProjectGroup.SelectedIndexChanged += new System.EventHandler(this.ComboBox_ProjectGroup_SelectedIndexChanged);
             // 
             // Label_ProjectName
@@ -230,13 +230,14 @@
             this.Menu_Language_zhCN.Checked = true;
             this.Menu_Language_zhCN.CheckState = System.Windows.Forms.CheckState.Checked;
             this.Menu_Language_zhCN.Name = "Menu_Language_zhCN";
-            this.Menu_Language_zhCN.Size = new System.Drawing.Size(141, 22);
+            this.Menu_Language_zhCN.Size = new System.Drawing.Size(152, 22);
             this.Menu_Language_zhCN.Text = "中文(简体)";
+            this.Menu_Language_zhCN.Click += new System.EventHandler(this.Menu_Language_zhCN_Click);
             // 
             // Menu_Language_enUS
             // 
             this.Menu_Language_enUS.Name = "Menu_Language_enUS";
-            this.Menu_Language_enUS.Size = new System.Drawing.Size(141, 22);
+            this.Menu_Language_enUS.Size = new System.Drawing.Size(152, 22);
             this.Menu_Language_enUS.Text = "&English(US)";
             // 
             // ContextMenuStrip
@@ -263,6 +264,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.MenuStrip;
+            this.MaximizeBox = false;
             this.Name = "Form_MCAriaPlus";
             this.Text = "8Mi-MCAriaPlus";
             this.Load += new System.EventHandler(this.Form_MCAriaPlus_Load);

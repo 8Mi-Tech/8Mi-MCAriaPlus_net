@@ -349,5 +349,10 @@ namespace _8Mi_MCAriaPlus
         {
     
         }
+
+        private void Menu_Language_zhCN_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
