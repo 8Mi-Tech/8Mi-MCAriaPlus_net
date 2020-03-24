@@ -42,14 +42,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="8Mi-MCAriaPlus.exe" size="65024">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="8Mi-MCAriaPlus.exe" size="66048">
       <assemblyIdentity name="8Mi-MCAriaPlus" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>kyOU5zr7T64lF9COfIBWRILpGBZsrBnPsBgkzHNLGy4=</dsig:DigestValue>
+        <dsig:DigestValue>BE1AL8QdMetMHC+3NYxdERBBemqkQp1PSKfipqpS7qg=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

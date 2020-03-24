@@ -20,7 +20,7 @@ namespace _8Mi_MCAriaPlus
         {
             //E:程序集变量 名称 ProjectGroup 类型 文本型_数组 数组 0
             //C#:忘了..
-            ComboBox_ProjectGroup.Items.AddRange("PG-Via;PG-Vle;PG-AuthMe;PG-BentoBoxWorld;P-LuckPerms;P-PlotSquared;P-FastAsyncWorldEdit;S-Mohist;S-Paper;S-BungeeCord;S-Waterfall;S-Travertine;SG-OneKeyDownload".Split(';'));
+            ComboBox_ProjectGroup.Items.AddRange("PG-Via;PG-Vle;PG-AuthMe;PG-BentoBoxWorld;PG-ProtocolLib;P-LuckPerms;P-PlotSquared;P-FastAsyncWorldEdit;S-Mohist;S-Paper;S-BungeeCord;S-Waterfall;S-Travertine;SG-OneKeyDownload".Split(';'));
             //C#:string[] 文本数组变量="文本".Split('用作分割的文本');<前面有 string[] 是直接生成一个变量>
             //E: 文本数组变量 = 分割文本("文本","用作分割的文本",)
 
@@ -104,11 +104,20 @@ namespace _8Mi_MCAriaPlus
                         foreach (var Name in JSON["jobs"])
                             ComboBox_ProjectName.Items.Add(Name["name"]);
                         break;
+                    case ("PG-ProtocolLib"):
+                        ComboBox_ProjectName.Items.AddRange("ProtocolLib-Server-1.7.10;ProtocolLib-Latest".Split(';'));
+                        break;
                     case ("P-PlotSquared"):
-                        JSON = JObject.Parse(readHtml("https://ci.athion.net/job/PlotSquared-Breaking/lastSuccessfulBuild/api/json"));
+                        //JSON = JObject.Parse(readHtml(""));
+                        //https://ci.athion.net/job/PlotSquared-Legacy/lastSuccessfulBuild/api/json
+                        //https://ci.athion.net/job/PlotSquared-Releases/api/json
+                        //请问怎么把两者混在一起，若有看到这个地方的开发者可以试下合并分支
                         break;
                     case ("P-FastAsyncWorldEdit"):
-                        JSON = JObject.Parse(readHtml(""));
+                        //JSON = JObject.Parse(readHtml(""));
+                        //https://ci.athion.net/job/FastAsyncWorldEdit/
+                        //https://ci.athion.net/job/FastAsyncWorldEdit-1.15/
+                        //问题与上面的PlotSquared一样的
                         break;
                     case ("S-Mohist"):
                         JSON = JObject.Parse(readHtml("https://ci.codemc.io/job/Mohist-Community/api/json"));
@@ -290,6 +299,21 @@ namespace _8Mi_MCAriaPlus
                         Program.DownloadLink = "https://ci.md-5.net/job/BungeeCord//lastSuccessfulBuild/artifact/" + JSON["artifacts"][ComboBox_ProjectName.SelectedIndex]["relativePath"];
                         Program.FileName = JSON["artifacts"][ComboBox_ProjectName.SelectedIndex]["fileName"].ToString();
                         break;
+                    case ("PG-ProtocolLib"):
+                        switch (ComboBox_ProjectName.Text)
+                        {
+                            case ("ProtocolLib-Server-1.7.10"):
+                                Program.DownloadLink = "https://github.com/dmulloy2/ProtocolLib/releases/download/3.7.0/ProtocolLib.jar";
+                                Program.FileName = "ProtocolLib.jar";
+                                break;
+                            case ("ProtocolLib-Latest"):
+                                JSON = JObject.Parse(readHtml("https://ci.dmulloy2.net/job/ProtocolLib/lastSuccessfulBuild/api/json"));
+                                Program.DownloadLink = "https://ci.dmulloy2.net/job/ProtocolLib/lastSuccessfulBuild/artifact/" + JSON["artifacts"].Last["relativePath"];
+                                Program.FileName = JSON["artifacts"].Last["fileName"].ToString();
+                                break;
+                        }
+                        break;
+
                 }
                 AutoChangeName();
                 All_Boxs_Enabled_Check(true, 0);
