@@ -5,6 +5,8 @@ using System.Windows.Forms;
 using Newtonsoft.Json.Linq;
 using System.Threading;
 using System.Diagnostics;
+using _8Mi_MCAriaPlus._Mi_Utils;
+using _8Mi_MCAriaPlus._8Mi_BaseClass;
 
 namespace _8Mi_MCAriaPlus
 {
@@ -14,13 +16,17 @@ namespace _8Mi_MCAriaPlus
         {
             InitializeComponent();
         }
+        //工具类初始化
+        MiArray miArray = new MiArray();
+        //环境初始化
+        Api api = new Api();
 
 
         private void Form_MCAriaPlus_Load(object sender, EventArgs e)
         {
             //E:程序集变量 名称 ProjectGroup 类型 文本型_数组 数组 0
             //C#:忘了..
-            ComboBox_ProjectGroup.Items.AddRange("PG-Via;PG-Vle;PG-AuthMe;PG-BentoBoxWorld;PG-ProtocolLib;P-LuckPerms;P-PlotSquared;P-FastAsyncWorldEdit;S-Mohist;S-Paper;S-BungeeCord;S-Waterfall;S-Travertine;SG-OneKeyDownload".Split(';'));
+            ComboBox_ProjectGroup.Items.AddRange(api.projectGroup);
             //C#:string[] 文本数组变量="文本".Split('用作分割的文本');<前面有 string[] 是直接生成一个变量>
             //E: 文本数组变量 = 分割文本("文本","用作分割的文本",)
 
@@ -46,29 +52,6 @@ namespace _8Mi_MCAriaPlus
             //C#: "文本".ToLower();
             //E: 到小写("文本")
         }
-        public static void AppendToArray<T>(ref T[] array, T[] data)
-        {
-            T[] result = new T[array.Length + data.Length];
-            for (int i = 0; i < array.Length; i++)
-            {
-                result[i] = array[i];
-            }
-            for (int i = array.Length; i < array.Length + data.Length; i++)
-            {
-                result[i] = data[i - array.Length];
-            }
-            array = result;
-        }
-        public static void AppendToArray<T>(ref T[] array, T data)
-        {
-            T[] result = new T[array.Length + 1];
-            for (int i = 0; i < array.Length; i++)
-            {
-                result[i] = array[i];
-            }
-            result[array.Length] = data;
-            array = result;
-        }
         public static void setEnabledforAllComponents(Control c,bool e)
         {
             foreach(Control i in c.Controls)
@@ -82,70 +65,67 @@ namespace _8Mi_MCAriaPlus
             All_Boxs_Enabled_Check(false, -1);
             new Thread(()=> {
                 var JSON = new JObject();
-                switch (ComboBox_ProjectGroup.Text)
+                switch (ComboBox_ProjectGroup.SelectedIndex)
                 {
-                    case ("PG-Via"):
+                    case 0:
                         //Thread.Sleep(1000);
-                        JSON = JObject.Parse(readHtml("https://ci.viaversion.com/api/json"));
+                        JSON = JObject.Parse(readHtml(api.projectHtml[0]));
                         foreach (var Name in JSON["jobs"])
                             if (Name["name"].ToString().StartsWith("Via"))
                                 ComboBox_ProjectName.Items.Add(Name["name"]);
                         break;
-                    case ("P-LuckPerms"):
-                        JSON = JObject.Parse(readHtml("https://ci.lucko.me/job/LuckPerms/lastSuccessfulBuild/api/json"));
+                    case 2:
+                        JSON = JObject.Parse(readHtml(api.projectHtml[2]));
+                        break;
+                    case 3:
+                        JSON = JObject.Parse(readHtml(api.projectHtml[3]));
+                        foreach (var Name in JSON["jobs"])
+                            ComboBox_ProjectName.Items.Add(Name["name"]);
+                        break;
+                    case 4:
+                        ComboBox_ProjectName.Items.AddRange(api.projectHtml[4].Split(';'));
+                        break;
+                    case 5:
+                        JSON = JObject.Parse(readHtml(api.projectHtml[5]));
                         foreach (var Name in JSON["artifacts"])
                             ComboBox_ProjectName.Items.Add(SplitMavenFile(Name["fileName"].ToString())[1]);
                         break;
-                    case ("PG-AuthMe"):
-                        JSON = JObject.Parse(readHtml("https://ci.codemc.org/job/AuthMe/api/json"));
-                        break;
-                    case ("PG-BentoBoxWorld"):
-                        JSON = JObject.Parse(readHtml("https://ci.codemc.org/job/BentoBoxWorld/api/json"));
-                        foreach (var Name in JSON["jobs"])
-                            ComboBox_ProjectName.Items.Add(Name["name"]);
-                        break;
-                    case ("PG-ProtocolLib"):
-                        ComboBox_ProjectName.Items.AddRange("ProtocolLib-Server-1.7.10;ProtocolLib-Latest".Split(';'));
-                        break;
-                    case ("P-PlotSquared"):
+
+                    case 6:
                         //JSON = JObject.Parse(readHtml(""));
-                        //https://ci.athion.net/job/PlotSquared-Legacy/lastSuccessfulBuild/api/json
-                        //https://ci.athion.net/job/PlotSquared-Releases/api/json
                         //请问怎么把两者混在一起，若有看到这个地方的开发者可以试下合并分支
                         break;
-                    case ("P-FastAsyncWorldEdit"):
+                    case 7:
                         //JSON = JObject.Parse(readHtml(""));
-                        //https://ci.athion.net/job/FastAsyncWorldEdit/
-                        //https://ci.athion.net/job/FastAsyncWorldEdit-1.15/
                         //问题与上面的PlotSquared一样的
                         break;
-                    case ("S-Mohist"):
-                        JSON = JObject.Parse(readHtml("https://ci.codemc.io/job/Mohist-Community/api/json"));
+                    case 8:
+                        JSON = JObject.Parse(readHtml(api.projectHtml[8]));
                         foreach (var Name in JSON["jobs"])
                             ComboBox_ProjectName.Items.Add(Name["name"]);
                         break;
-                    case ("S-Paper"):
-                        JSON = JObject.Parse(readHtml("https://papermc.io/api/v1/paper/"));
+                    case 9:
+                        JSON = JObject.Parse(readHtml(api.projectHtml[9]));
                         foreach (var Name in JSON["versions"])
                             ComboBox_ProjectName.Items.Add(Name.ToString());
                         break;
-                    case ("S-BungeeCord"):
-                        JSON = JObject.Parse(readHtml("https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/api/json"));
+                    case 10:
+                        JSON = JObject.Parse(readHtml(api.projectHtml[10]));
                         foreach (var Name in JSON["artifacts"])
                             ComboBox_ProjectName.Items.Add(Name["fileName"]);
                         break;
-                    case ("S-Waterfall"):
-                        JSON = JObject.Parse(readHtml("https://papermc.io/ci/job/Waterfall/lastSuccessfulBuild/api/json"));
+                    case 11:
+                        JSON = JObject.Parse(readHtml(api.projectHtml[11]));
                         foreach (var Name in JSON["artifacts"])
                             ComboBox_ProjectName.Items.Add(Name["fileName"]);
                         break;
-                    case ("S-Travertine"):
-                        JSON = JObject.Parse(readHtml("https://papermc.io/ci/job/Travertine/lastSuccessfulBuild/api/json"));
+                    case 12:
+                        JSON = JObject.Parse(readHtml(api.projectHtml[12]));
                         foreach (var Name in JSON["artifacts"])
                             ComboBox_ProjectName.Items.Add(Name["fileName"]);
                         break;
-                    case ("SG-OneKeyDownload"):
-                        ComboBox_ProjectName.Items.AddRange("BungeeCord;Waterfall;Travertine;Paper-1.12;Paper-1.13;Paper-1.14".Split(';'));
+                    case 13:
+                        ComboBox_ProjectName.Items.AddRange(api.projectHtml[13].Split(';'));
                         break;
                 }
                 All_Boxs_Enabled_Check(true, 0);

@@ -94,16 +94,18 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Form1.cs">
+    <Compile Include="Mi_BaseClass\Api.cs" />
+    <Compile Include="8Mi_Main.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <Compile Include="8Mi_Main.Designer.cs">
+      <DependentUpon>8Mi_Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Mi_Utils\MiArray.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Form1.resx">
-      <DependentUpon>Form1.cs</DependentUpon>
+    <EmbeddedResource Include="8Mi_Main.resx">
+      <DependentUpon>8Mi_Main.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -143,6 +145,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="8Mi-256.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Mi_Data\" />
+    <Folder Include="Mi_Product\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
